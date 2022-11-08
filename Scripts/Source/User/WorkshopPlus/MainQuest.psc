@@ -276,6 +276,9 @@ Bool bBoostCarryWeightBuffApplied = false
 Float fPreviousTimeScale = 0.0
 Bool bTimeFrozen = false
 
+; [Unknown Zombie] Change for 1.0.12 to restore rads on flight mode exit. -- Store player's Rad level.
+int iPlayerRads = 0
+
 ; ---------------------------------------------
 ; Events
 ; --------------------------------------------- 
@@ -512,8 +515,9 @@ Function EnableFlight()
 	
 	; 1.0.12 - Removing the IsPlayerInWorkshopMode check as it can very easily get out of sync
 	if(PlayerRef.GetRace() == LastKnownRace)
-		int iRadsToHeal = (PlayerRef.GetValue(Rads) as int)
-		PlayerRef.RestoreValue(Rads, iRadsToHeal)
+		; [Unknown Zombie] Change for 1.0.12 -- Save player Rad level before healing.
+		iPlayerRads = (PlayerRef.GetValue(Rads) as int)
+		PlayerRef.RestoreValue(Rads, iPlayerRads)
 		
 		Game.ForceFirstPerson()
 		PlayerRef.SetRace(FloatingRace)
@@ -544,6 +548,9 @@ Function DisableFlight()
 		else
 			PlayerRef.SetRace(HumanRace)
 		endif
+		
+		; [Unkown Zombie] Change for 1.0.12 -- Give stored Rad level back to player after becoming Human again.
+		PlayerRef.DamageValue(Rads, iPlayerRads)
 	endif		
 EndFunction
 
