@@ -497,6 +497,8 @@ Function UnfreezeTime()
 		endif
 	endif
 	
+	fPreviousTimeScale = 0.0 ; Clear this out so UnfreezeTime stops trying to control TimeScale
+	
 	PlayerRef.DispelSpell(FreezeTimeSpell)
 	
 	bTimeFrozen = false
@@ -962,6 +964,6 @@ EndFunction
 ; Added 1.0.4
 Function ShowHotkeyWarning()
 	if(Settings_ShowHotkeyWarnings.GetValue() == 1.0)
-		ShowHotkeyWarning()
+		MustBeInWorkshopModeToUseHotkeys.Show()
 	endif
 EndFunction
